@@ -1,0 +1,6 @@
+{
+  "firebase": "stretch",
+  "public": "app",
+  "ignore": [
+  ]
+}
