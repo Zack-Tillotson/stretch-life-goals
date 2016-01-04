@@ -14,7 +14,9 @@ const GoalView = React.createClass({
   },
 
   getNextMilestone() {
-    return this.props.active.milestones[0];
+    const progress = this.getProgress();
+    return this.props.active.milestones.find(milestone => milestone > progress) || 
+      this.props.active.milestones[this.props.active.milestones.length - 1];
   },
 
   getProgress() {
