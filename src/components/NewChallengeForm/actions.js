@@ -10,24 +10,15 @@ import firebase from '../../firebase';
 
 const dispatcher = (dispatch) => {
 
-  function dispatchData(data) {
-    dispatch({type: actions.challenge, ...data});
-  }
-
   return {
 
     pushChallenge(uiCallback, challengeData, path) {
-
-      const callback = () => {
-        uiCallback(arguments);
-        dispatchData(arguments);
-      }
 
       const data = {
         information: challengeData
       };
 
-      return firebase.pushData(callback, data, path);
+      return firebase.pushData(uiCallback, data, path);
     }
 
   }

@@ -1,5 +1,5 @@
 import React from 'react';
-import InlineCss from "react-inline-css";
+import InlineCss from 'react-inline-css';
 import {connect} from 'react-redux';
 
 import styles from './styles';
@@ -27,10 +27,11 @@ const NewChallengeForm = React.createClass({
     this.props.pushChallenge(this.handlePutResult, challengeData, this.props.firebase.authInfo.uid);
   },
 
-  handlePutResult(result) {
-    const [callbackFn, data, newId] = result;
-    if(newId) {
+  handlePutResult(success) {
+    if(success) {
       this.clearFormData();
+    } else {
+      // TODO
     }
   },
 

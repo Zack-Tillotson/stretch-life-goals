@@ -64,7 +64,10 @@ export default {
 
   pushData(onComplete, data, path = '/') {
     const ref = utils.connect(path);
-    ref.push(data, onComplete);
+    const callback = (result) => {
+      onComplete(!result, result);
+    }
+    ref.push(data, callback);
     return ref;
   }
 }

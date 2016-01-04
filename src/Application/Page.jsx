@@ -7,20 +7,23 @@ import styles from './styles';
 import Header from '../components/Header';
 import Body from '../components/Body';
 import Footer from '../components/Footer';
-import DevTools from './DevTools';
+import DevTools from '../state/DevTools';
 
 import firebase from '../firebase';
 import actions from '../firebase/actions';
 import firebaseSelector from '../firebase/selector';
 
+import {challenge as challengeSelector} from '../state/selector';
+
 import LoginForm from '../components/LoginForm';
 import FirebaseStatus from '../components/FirebaseStatus';
 import ChallengeSelector from '../components/ChallengeSelector';
 import NewChallengeForm from '../components/NewChallengeForm';
+import ChallengeView from '../components/ChallengeView';
 
 const selector = (state) => {
   const firebase = firebaseSelector(state);
-  const challenge = state.ui.active.key ? state.ui.active : undefined;
+  const challenge = challengeSelector(state);
   return {firebase, challenge};
 }
 
@@ -31,7 +34,6 @@ const Page = React.createClass({
   },
 
   componentWillReceiveProps(newProps) {
-    console.log("Connecting to data!", newProps);
     if(newProps.firebase.uid != this.props.firebase.uid) {
       this.syncWithUserData(newProps.firebase.uid);
     }
@@ -51,13 +53,14 @@ const Page = React.createClass({
         <Body>
           <LoginForm />
           {this.props.firebase.isLoggedIn && (
-            <div>
-              <NewChallengeForm />
-              <ChallengeSelector />
-            </div>
-          )}
-          {!!this.props.challenge && (
-            "Challenge Selected!"
+            !!this.props.challenge.hasSelection && (
+                <ChallengeView />
+            ) || (
+              <div>
+                <ChallengeSelector />
+                <NewChallengeForm />
+              </div>
+            )
           )}
           <FirebaseStatus />
         </Body>

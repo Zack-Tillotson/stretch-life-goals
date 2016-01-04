@@ -1,7 +1,7 @@
 import { createStore, applyMiddleware, combineReducers, compose } from 'redux';
 import ThunkMiddleware from 'redux-thunk';
 import LoggerMiddleware from 'redux-logger';
-import DevTools from '../DevTools';
+import DevTools from './DevTools';
 import {persistState} from 'redux-devtools';
 import rootReducer from './reducer';
 

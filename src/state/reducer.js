@@ -1,6 +1,6 @@
 import {combineReducers} from 'redux';
-import firebase from '../../firebase/reducer';
-import actions from '../../actions';
+import firebase from '../firebase/reducer';
+import actions from '../actions';
 
 const challenges = (state = [], action) => {
   switch(action.type) {
@@ -16,13 +16,13 @@ const challenges = (state = [], action) => {
 }
 
 function getInitialUiState() {
-  return {active: {}};
+  return {active: ''};
 }
 const ui = (state = getInitialUiState(), action) => {
   switch(action.type) {
     case actions.ui:
       if(action.subType == 'selectChallenge') {
-        state = {...state, active: action.challenge};
+        state = {...state, active: action.challengeKey};
       }
       break;
   }
