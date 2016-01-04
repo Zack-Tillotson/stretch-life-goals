@@ -11,7 +11,6 @@ const NewGoalForm = React.createClass({
   propTypes: {
     pushGoal: React.PropTypes.func.isRequired,   // Actions...
     firebase: React.PropTypes.object.isRequired, // Selector...
-    selected: React.PropTypes.object.isRequired
   },
 
   getInitialState() {
@@ -23,10 +22,11 @@ const NewGoalForm = React.createClass({
   getDataFromForm() {
 
     const name = this.refs.goalName.value;
+    const endDate = this.refs.goalEnd.value;
     const units = this.refs.goalUnits.value;
     const milestones = [];
 
-    const data = {name, units, milestones};
+    const data = {name, endDate, units, milestones};
 
     Array.apply(null, Array(this.state.goalCount)).forEach((bleh, index) => {
       data.milestones[index] = this.refs[`goalValue${index}`].value;
@@ -37,6 +37,7 @@ const NewGoalForm = React.createClass({
 
   clearFormData() {
     this.refs.goalName.value = '';
+    this.refs.goalEnd.value = '';
     this.refs.goalUnits.value = '';
     this.refs.goalValue0.value = '';
     this.setState({goalCount: 1});
@@ -48,14 +49,12 @@ const NewGoalForm = React.createClass({
     this.props.pushGoal(
       this.handlePutResult, 
       data,
-      this.props.firebase.authInfo.uid,
-      this.props.selected.challenge.key
+      this.props.firebase.authInfo.uid
     );
   },
 
   handlePutResult(success) {
     if(success) {
-      this.clearFormData();
     } else {
       // TODO
     }
@@ -77,6 +76,10 @@ const NewGoalForm = React.createClass({
           <div>
             <label htmlFor='goalName'>Name</label>
             <input name='goalName' ref='goalName'></input>
+          </div>
+          <div>
+            <label htmlFor='goalEnd'>End Date</label>
+            <input name='goalEnd' ref='goalEnd'></input>
           </div>
           <div>
             <label htmlFor='goalUnits'>Units</label>

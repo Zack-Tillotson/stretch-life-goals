@@ -1,20 +1,40 @@
-export const challenges = (state) => state.challenges;
+import {createSelector} from 'reselect';
 
-const activeChallenge = (state) => state.challenges[state.ui.active];
+const base = (state) => {
+  return state.firebaseData;
+}
 
-function transformChallenge(challenge = {}) {
+function transformObjectToArray(obj) {
+  return Object.keys(obj).map(key => {
+    return {
+      ...obj[key],
+      key
+    }
+  });
+}
+
+export const goals = createSelector(base, (state) => {
+  return transformObjectToArray(state.goals || {});
+});
+
+export const ui = (state) => {
   return {
-    ...challenge,
-    goals: objectToArray(challenge.goals)
+    ...state.ui,
+    view: {
+      goal: state.ui.viewName == 'goal',
+      addGoal: state.ui.viewName == 'addGoal',
+      goalList: state.ui.viewName == 'goalList'
+    }
   };
 }
 
-function objectToArray(object = {}) {
-  return Object.keys(object).map(key => object[key]);
-}
+const hasActive = (state) => !!state.ui.active;
+const active = createSelector(hasActive, goals, ui,
+  (hasActive, goals, ui) => {
+    return hasActive ? goals.find(goal => goal.key == ui.active) : {}
+  }
+);
 
-export const challenge = (state) => {
-  const hasSelection = !!state.ui.active;
-  const challenge = transformChallenge(state.challenges.find(challenge => challenge.key == state.ui.active));
-  return {hasSelection, challenge};
+export const activeGoal = (state) => {
+  return {hasActive: hasActive(state), active: active(state)};
 }

@@ -1,8 +1,10 @@
+const firebaseMeta = (state) => state.firebaseMeta;
+
 export default (state) => {
-  const authProvider = state.firebase.authInfo && state.firebase.authInfo.provider || '';
-  const uid = state.firebase.authInfo && state.firebase.authInfo.uid || '';
+  const authProvider = firebaseMeta(state).authInfo && firebaseMeta(state).authInfo.provider || '';
+  const uid = firebaseMeta(state).authInfo && firebaseMeta(state).authInfo.uid || '';
   return {
-    ...state.firebase,
+    ...firebaseMeta(state),
     authProvider,
     uid
   };

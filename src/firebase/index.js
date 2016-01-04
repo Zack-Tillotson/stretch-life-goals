@@ -69,5 +69,14 @@ export default {
     }
     ref.push(data, callback);
     return ref;
+  },
+
+  remove(onComplete, path = '/') {
+    const ref = utils.connect(path);
+    const callback = (result) => {
+      onComplete(!result, result);
+    }
+    ref.set(null, callback);
+    return ref;
   }
 }

@@ -4,8 +4,8 @@ const dispatcher = (dispatch) => {
 
   return {
 
-    selectChallenge(challenge) {
-      dispatch({type: actions.ui, subType: 'selectChallenge', challenge});
+    resetView(key) {
+      dispatch({type: actions.ui, subType: 'navigateHome'});
     }
     
   }
