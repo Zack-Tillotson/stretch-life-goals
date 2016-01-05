@@ -8,14 +8,12 @@ import Header from '../components/Header';
 import BreadCrumbNav from '../components/BreadCrumbNav';
 import Body from '../components/Body';
 import Footer from '../components/Footer';
-import DevTools from '../state/DevTools';
 
 import firebase from '../firebase';
 import actions from '../firebase/actions';
 import selector from './selector';
 
 import LoginForm from '../components/LoginForm';
-import FirebaseStatus from '../components/FirebaseStatus';
 import GoalList from '../components/GoalList';
 import NewGoalLink from '../components/NewGoalLink';
 import NewGoalForm from '../components/NewGoalForm';
@@ -72,10 +70,8 @@ const Page = React.createClass({
         <Body>
           <BreadCrumbNav />
           {this.getCurrentView()}
-          <FirebaseStatus />
         </Body>
         <Footer />
-        <DevTools />
       </InlineCss>
     );
   }

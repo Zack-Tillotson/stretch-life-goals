@@ -1,9 +1,41 @@
 component {
+  padding: 25px 10px;
+
+  h3 {
+    font-size: 25px;
+    margin-bottom: 25px;
+  }
 
   li {
-    cursor: pointer;
-    background: #eee;
     margin: 3px 0;
+
+    .openLink {
+      width: 600px;
+      position: relative;
+
+      .name {
+        position: relative;
+      }
+
+      .progressAmt {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        background: lightgreen;
+      }
+    }
+
+    .openLink, .progressBtn {
+      display: inline-block;
+      cursor: pointer;
+      border: solid 1px #000;
+      padding: 5px;
+      margin: 10px 0;
+    }
+
+    .progressBtn {
+      margin-left: 25px;
+    }
   }
-  
 }

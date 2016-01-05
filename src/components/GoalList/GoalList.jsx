@@ -13,15 +13,27 @@ const GoalList = React.createClass({
     requestGoalView: React.PropTypes.func.isRequired
   },
 
+  incrementProgress(goalId) {
+    this.props.incrementProgress(this.completedIncrement, this.props.firebase.uid, goalId);
+  },
+
+  completedIncrement() {
+
+  },
+
   render() {
     return (
       <InlineCss stylesheet={styles} componentName="component">
-        <h3>Goals</h3>
+        <h3>Your Goals</h3>
         {!!this.props.goals.length && (
           <ul>
             {this.props.goals.map((goal, index) => (
-              <li key={goal.key} onClick={this.props.requestGoalView.bind(this, goal.key)}>
-                {goal.name}
+              <li key={goal.key}>
+                <span className="openLink" onClick={this.props.requestGoalView.bind(this, goal.key)}>
+                  <span className="progressAmt" style={{width: `${goal.percDone}%`}}></span>
+                  <span className="name">{goal.name}</span>
+                </span>
+                <span className="progressBtn" onClick={this.incrementProgress.bind(this, goal.key)}>+</span>
               </li>
             ))}
           </ul>

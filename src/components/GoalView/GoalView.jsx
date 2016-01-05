@@ -63,9 +63,11 @@ const GoalView = React.createClass({
         <div onClick={this.incrementProgress}>
           Record Progress
         </div>
-        <div onClick={this.decrementProgress}>
-          Oops, remove last progress
-        </div>
+        {this.getProgress() > 0 && (
+          <div onClick={this.decrementProgress}>
+            Oops, remove last progress
+          </div>
+        )}
       </InlineCss>
     );
   }

@@ -14,7 +14,15 @@ function transformObjectToArray(obj) {
 }
 
 export const goals = createSelector(base, (state) => {
-  return transformObjectToArray(state.goals || {});
+  const array = transformObjectToArray(state.goals || {});
+  return array.map(goal => {
+    const progress = transformObjectToArray(goal.progress || {});
+    const amtDone = progress.length;
+    const nextMilestone = goal.milestones.find(milestone => milestone > amtDone) 
+      || goal.milestones[goal.milestones.length];
+    const percDone = parseInt(amtDone / nextMilestone * 100);
+    return {...goal, amtDone, nextMilestone, percDone};
+  });
 });
 
 export const ui = (state) => {

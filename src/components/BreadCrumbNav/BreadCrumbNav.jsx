@@ -19,7 +19,7 @@ const BreadCrumbNav = React.createClass({
     else if(this.props.ui.view.goal || this.props.ui.view.addGoal) {
       return (
         <div onClick={this.resetView}>
-          Back to Goal List
+          ➥ Back
         </div>
       );
     }
