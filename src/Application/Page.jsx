@@ -19,7 +19,6 @@ import NewGoalLink from '../components/NewGoalLink';
 import NewGoalForm from '../components/NewGoalForm';
 import GoalView from '../components/GoalView';
 
-
 const Page = React.createClass({
 
   componentDidMount() {
@@ -44,8 +43,13 @@ const Page = React.createClass({
       return (
         <LoginForm />
       );
-    }
-    else if(this.props.ui.view.goal) {
+    } else if(!this.props.firebase.connected || !this.props.firebase.data) {
+      return (
+        <div className="waitingForData">
+          Loading data, please wait...
+        </div>
+      );
+    } else if(this.props.ui.view.goal) {
       return (
         <GoalView />
       );

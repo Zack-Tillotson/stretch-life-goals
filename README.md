@@ -1,6 +1,10 @@
 # Stretch: Life Goals
 Zack Tillotson
 
+## In Action
+
+[Stretch](https://stretch.firebaseapp.com)
+
 ## Development
 
 ```
