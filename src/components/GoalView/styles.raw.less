@@ -1,9 +1,77 @@
 component {
 
-  li {
-    cursor: pointer;
-    background: #eee;
-    margin: 3px 0;
+  h3 {
+    font-size: 35px;
   }
-  
+
+  .milestones {
+    margin-top: 15px;
+
+    .milestoneTitle {
+      font-size: 25px;
+      border-bottom: solid 2px #ccc;
+    }
+
+    .milestone {
+      display: inline-block;
+      width: 100px;
+      color: #ccc;
+      background: #fff;
+      border: solid 2px rgba(0,0,0,0);
+
+      &.active {
+        color: #000;
+        border: solid 2px rgba(0,0,0,1);
+      }
+
+      &.complete {
+        color: #999;
+        background: #B0FFB0;
+      }
+    }
+  }
+
+  .controls {
+    .control {
+      display: inline-block;
+      padding: 5px 25px;
+      cursor: pointer;
+
+      &:hover {
+        color: #666;
+
+        .controlIcon {
+          border-color: #666;
+        }
+      }
+
+      .controlIcon {
+        border: solid 2px #000;
+        border-radius: 150px;
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        margin-right: 5px;
+      }
+
+      &.delete {
+        margin-left: 50px;
+        color: darkred;
+
+        .controlIcon {
+          color: darkred;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 600px) {
+  component {
+
+    .controls .control.delete {
+      margin-top: 50px;
+    }
+    
+  }
 }

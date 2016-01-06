@@ -7,19 +7,21 @@ const dispatcher = (dispatch) => {
 
     incrementProgress(uiCallback, uid, goalId) {
       const path = `${uid}/goals/${goalId}/progress`;
-      const callback = (success) => {
-        uiCallback(success);
-      }
       return firebase.pushData(uiCallback, {timestamp: Date.now()}, path);
     },
 
     decrementProgress(uiCallback, uid, goalId, progressId) {
       const path = `${uid}/goals/${goalId}/progress/${progressId}`;
-      const callback = (success) => {
-        uiCallback(success);
-      }
       return firebase.remove(uiCallback, path);
     },
+
+    removeGoal(uid, goalId) {
+      const path = `${uid}/goals/${goalId}`;
+      const callback = (success) => {
+        
+      }
+      return firebase.remove(callback, path);
+    }
     
   }
 }

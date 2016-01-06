@@ -32,6 +32,14 @@ const ui = (state = getInitialUiState(), action) => {
         state = {...state, active: action.key, viewName: 'goal'};
       }
       break;
+    case actions.firebase:
+      if(!/^.info/.test(action.path)) {
+        if(!action.data.goals ||
+          !Object.keys(action.data.goals).find(key => key == state.active)) {
+          state = {...state, ...getInitialUiState()};
+        }
+      }
+      break;
   }
   return state;
 }

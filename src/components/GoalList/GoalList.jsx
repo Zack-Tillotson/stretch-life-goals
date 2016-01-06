@@ -31,6 +31,7 @@ const GoalList = React.createClass({
               <li key={goal.key}>
                 <span className="openLink" onClick={this.props.requestGoalView.bind(this, goal.key)}>
                   <span className="progressAmt" style={{width: `${goal.percDone}%`}}></span>
+                  <span className="pacingAmt" style={{left: `${goal.percTimeGone}%`}}></span>
                   <span className="name">{goal.name}</span>
                 </span>
                 <span className="progressBtn" onClick={this.incrementProgress.bind(this, goal.key)}>+</span>

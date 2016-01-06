@@ -1,4 +1,5 @@
 import {createSelector} from 'reselect';
+import moment from 'moment';
 
 const base = (state) => {
   return state.firebaseData;
@@ -16,12 +17,19 @@ function transformObjectToArray(obj) {
 export const goals = createSelector(base, (state) => {
   const array = transformObjectToArray(state.goals || {});
   return array.map(goal => {
+
     const progress = transformObjectToArray(goal.progress || {});
     const amtDone = progress.length;
     const nextMilestone = goal.milestones.find(milestone => milestone > amtDone) 
       || goal.milestones[goal.milestones.length];
     const percDone = parseInt(amtDone / nextMilestone * 100);
-    return {...goal, amtDone, nextMilestone, percDone};
+
+    const startDate = new Date(goal.startDate);
+    const endDate = new Date(goal.endDate);
+
+    const percTimeGone = parseInt((+new Date() - startDate) / (+endDate-startDate) * 100);
+
+    return {...goal, amtDone, nextMilestone, percDone, startDate, endDate, percTimeGone};
   });
 });
 

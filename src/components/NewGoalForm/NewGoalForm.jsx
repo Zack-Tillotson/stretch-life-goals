@@ -2,6 +2,11 @@ import React from 'react';
 import InlineCss from 'react-inline-css';
 import {connect} from 'react-redux';
 
+import DatePicker from 'react-datepicker';
+import Moment from 'moment';
+
+import datePickerStyles from 'react-datepicker/dist/react-datepicker.css';
+
 import styles from './styles';
 import selector from './selector.js';
 import actions from './actions.js';
@@ -22,11 +27,12 @@ const NewGoalForm = React.createClass({
   getDataFromForm() {
 
     const name = this.refs.goalName.value;
-    const endDate = this.refs.goalEnd.value;
+    const startDate = +Moment();
+    const endDate = +this.refs.goalEnd.getValue();
     const units = this.refs.goalUnits.value;
     const milestones = [];
 
-    const data = {name, endDate, units, milestones};
+    const data = {name, startDate, endDate, units, milestones};
 
     Array.apply(null, Array(this.state.goalCount)).forEach((bleh, index) => {
       data.milestones[index] = this.refs[`goalValue${index}`].value;
@@ -70,27 +76,37 @@ const NewGoalForm = React.createClass({
 
   render() {
     return (
-      <InlineCss stylesheet={styles} componentName="component">
+      <InlineCss stylesheet={styles + datePickerStyles} componentName="component">
         <h3>Add Goal</h3>
         <form onSubmit={this.handleSubmit}>
-          <div>
-            <label htmlFor='goalName'>Name</label>
-            <input name='goalName' ref='goalName'></input>
-          </div>
-          <div>
-            <label htmlFor='goalEnd'>End Date</label>
-            <input name='goalEnd' ref='goalEnd'></input>
-          </div>
-          <div>
-            <label htmlFor='goalUnits'>Units</label>
-            <input name='goalUnits' ref='goalUnits'></input>
-          </div>
-          {Array.apply(null, Array(this.state.goalCount)).map((item, index) => (
-            <div key={index}>
-              <label htmlFor={`goalValue${index}`}>{this.getGoalName(index)}</label>
-              <input name={`goalValue${index}`} ref={`goalValue${index}`}></input>
-            </div>
-          ))}
+          <table>
+            <tbody>
+              <tr>
+                <td><label htmlFor='goalName'>Name</label></td>
+                <td><input name='goalName' ref='goalName'></input></td>
+              </tr>
+              <tr>
+                <td><label htmlFor='goalEnd'>End Date</label></td>
+                <td>
+                  <DatePicker 
+                    ref="goalEnd"
+                    minDate={Moment()}
+                    placeholderText="The goal date" 
+                    selected={Moment().add(1, 'month')} />
+                </td>
+              </tr>
+              <tr>
+                <td><label htmlFor='goalUnits'>Units</label></td>
+                <td><input name='goalUnits' ref='goalUnits'></input></td>
+              </tr>
+              {Array.apply(null, Array(this.state.goalCount)).map((item, index) => (
+                <tr key={index}>
+                  <td><label htmlFor={`goalValue${index}`}>{this.getGoalName(index)}</label></td>
+                  <td><input name={`goalValue${index}`} ref={`goalValue${index}`}></input></td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
           <div onClick={this.addGoal}>
             + Add Stretch Goal
           </div>

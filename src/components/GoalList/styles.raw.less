@@ -24,6 +24,14 @@ component {
         left: 0;
         background: lightgreen;
       }
+
+      .pacingAmt {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        width: 2px;
+        background: blue;
+      }
     }
 
     .openLink, .progressBtn {
@@ -37,5 +45,15 @@ component {
     .progressBtn {
       margin-left: 25px;
     }
+  }
+}
+
+@media (max-width: 600px) {
+  component {
+
+    li .openLink {
+      width: 200px;
+    }
+    
   }
 }

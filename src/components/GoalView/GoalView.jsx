@@ -1,6 +1,7 @@
 import React from 'react';
 import InlineCss from "react-inline-css";
 import {connect} from 'react-redux';
+import moment from 'moment';
 
 import styles from './styles';
 import selector from './selector.js';
@@ -13,10 +14,39 @@ const GoalView = React.createClass({
     active: React.PropTypes.object.isRequired
   },
 
-  getNextMilestone() {
+  getMilestones() {
+    
     const progress = this.getProgress();
-    return this.props.active.milestones.find(milestone => milestone > progress) || 
-      this.props.active.milestones[this.props.active.milestones.length - 1];
+    let foundActive = false;
+
+    const milestones = this.props.active.milestones.map(milestone => {
+      
+      const isComplete = milestone <= progress;
+      const isActive = !foundActive && !isComplete;
+
+      if(isActive) {
+        foundActive = true;
+      }
+
+      const completeClass = isComplete ? 'complete' : '';
+      const activeClass = isActive ? 'active' : '';
+
+      return {value: milestone, completeClass, activeClass};
+    });
+
+
+    return (
+      <div className="milestones">
+        <div className="milestoneTitle">Milestones:</div>
+        {milestones.map(milestone => (
+          <div 
+            key={milestone.value}
+            className={["milestone", milestone.completeClass, milestone.activeClass].join(" ")}>
+            {milestone.value}
+          </div>
+        ))}  
+      </div>
+    );
   },
 
   getProgress() {
@@ -25,7 +55,11 @@ const GoalView = React.createClass({
   },
 
   incrementProgress() {
-    this.props.incrementProgress(this.completedIncrement, this.props.firebase.uid, this.props.active.key);
+    this.props.incrementProgress(
+      this.completedIncrement, 
+      this.props.firebase.uid, 
+      this.props.active.key
+    );
   },
 
   completedIncrement(result) {
@@ -47,27 +81,55 @@ const GoalView = React.createClass({
 
   },
 
+  getStartDate() {
+    const {startDate} = this.props.active;
+    return moment(startDate).format('MMM d, YYYY');
+  },
+
+  getEndDate() {
+    const {endDate} = this.props.active;
+    return moment(endDate).format('MMM d, YYYY');
+  },
+
+  getGoalDuration() {
+    const {startDate, endDate} = this.props.active;
+    return moment(endDate).diff(startDate, 'days');
+  },
+
+  removeGoal() {
+    this.props.removeGoal(this.props.firebase.uid, this.props.active.key);
+  },
+
+  getControls() {
+    return (
+      <div className="controls">
+        <div className="control" onClick={this.incrementProgress}>
+          <span className="controlIcon">+</span> Add Progress
+        </div>
+        {this.getProgress() > 0 && (
+          <div className="control" onClick={this.decrementProgress}>
+            <span className="controlIcon">-</span> Remove Progress
+          </div>
+        )}
+        <div className="control delete" onClick={this.removeGoal}>
+          <span className="controlIcon">x</span>Delete Goal
+        </div>
+      </div>
+    );
+  },
+
   render() {
     return (
       <InlineCss stylesheet={styles} componentName="component">
-        <h3>{this.props.active.name}</h3>
-        <div>
-          Active until {this.props.active.endDate}
+        <h3>Goal: {this.props.active.name}</h3>
+        <div className="timePeriods">
+          From {this.getStartDate()} to {this.getEndDate()} ({this.getGoalDuration()} days)
         </div>
-        <div>
-          Next Milestone: {this.getNextMilestone()}
-        </div>
+        {this.getMilestones()}
         <div>
           Progress: {this.getProgress()}
         </div>
-        <div onClick={this.incrementProgress}>
-          Record Progress
-        </div>
-        {this.getProgress() > 0 && (
-          <div onClick={this.decrementProgress}>
-            Oops, remove last progress
-          </div>
-        )}
+        {this.getControls()}
       </InlineCss>
     );
   }

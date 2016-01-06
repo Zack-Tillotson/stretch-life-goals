@@ -24,6 +24,7 @@ module.exports = {
   module: {
     loaders: [
       { test: /\.jsx?$/, loader: 'babel', exclude: /node_modules/ },
+      { test: /\.css$/, loader: 'raw'},
       { test: /\.raw\.less$/, loader: 'raw!less'},
     ]
   },
