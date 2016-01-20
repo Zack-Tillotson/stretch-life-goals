@@ -32,13 +32,13 @@ const ProgressGraph = React.createClass({
     const monthClass = this.state.period == 'month' ? 'active' : '';
     return (
       <ul className="periodControls">
-        <li className={dayClass} onClick={this.setPeriod.bind(this, 'day')}>
+        <li className={['control', dayClass].join(' ')} onClick={this.setPeriod.bind(this, 'day')}>
           Daily
         </li>
-        <li className={weekClass} onClick={this.setPeriod.bind(this, 'week')}>
+        <li className={['control', weekClass].join(' ')} onClick={this.setPeriod.bind(this, 'week')}>
           Weekly
         </li>
-        <li className={monthClass} onClick={this.setPeriod.bind(this, 'month')}>
+        <li className={['control', monthClass].join(' ')} onClick={this.setPeriod.bind(this, 'month')}>
           Monthly
         </li>
       </ul>
@@ -91,9 +91,19 @@ const ProgressGraph = React.createClass({
     }).length;
   },
 
+  filterAxisLabels(label, index, ary) {
+    if(ary.length > 100) {
+      return index % 10 == 0 ? label : null;
+    } else if(ary.length > 50) {
+      return index % 3 == 0 ? label : null;
+    } else {
+      return label;
+    }
+  },
+
   getChartData() {
     return {
-      labels: this.getDataPeriods().map(this.getFormattedDate),
+      labels: this.getDataPeriods().map(this.getFormattedDate).map(this.filterAxisLabels),
       series: [this.getDataPeriodBounds().map(this.getProgressDuringPeriod)],
     }
   },

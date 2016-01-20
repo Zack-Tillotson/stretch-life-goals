@@ -3,8 +3,18 @@ component {
   .periodControls {
     text-align: center;
 
-    .active {
-      border: solid 1px #000;
+    .control {
+      display: inline-block;
+      padding: 3px 15px;
+      cursor: pointer;
+
+      &:hover {
+        background: #ddd;
+      }
+
+      &.active {
+        box-shadow: 2px 2px 5px #666;
+      }
     }
   }
 }
