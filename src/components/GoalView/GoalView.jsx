@@ -3,6 +3,8 @@ import InlineCss from "react-inline-css";
 import {connect} from 'react-redux';
 import moment from 'moment';
 
+import ProgressGraph from '../ProgressGraph';
+
 import styles from './styles';
 import selector from './selector.js';
 import actions from './actions';
@@ -16,7 +18,7 @@ const GoalView = React.createClass({
 
   getMilestones() {
     
-    const progress = this.getProgress();
+    const progress = this.getProgressValue();
     let foundActive = false;
 
     const milestones = this.props.active.milestones.map(milestone => {
@@ -50,8 +52,28 @@ const GoalView = React.createClass({
   },
 
   getProgress() {
+    return (
+      <div className="progressSection">
+        Progress: {this.getProgressValue()}
+        {this.getProgressGraph()}
+      </div>
+    );
+  },
+
+  getProgressValue() {
     const progress = this.props.active.progress || {};
     return Object.keys(progress).length;
+  },
+
+  getProgressGraph() {
+    const {progress, milestones, startDate, endDate} = this.props.active;
+    return (
+      <ProgressGraph 
+        progress={progress} 
+        milestones={milestones}
+        startDate={startDate}
+        endDate={endDate} />
+    );
   },
 
   incrementProgress() {
@@ -81,6 +103,14 @@ const GoalView = React.createClass({
 
   },
 
+  getTimePeriodSummary() {
+    return (
+      <div className="timePeriods">
+        From {this.getStartDate()} to {this.getEndDate()} ({this.getGoalDuration()} days)
+      </div>
+    );
+  },
+
   getStartDate() {
     const {startDate} = this.props.active;
     return moment(startDate).format('MMM d, YYYY');
@@ -106,7 +136,7 @@ const GoalView = React.createClass({
         <div className="control" onClick={this.incrementProgress}>
           <span className="controlIcon">+</span> Add Progress
         </div>
-        {this.getProgress() > 0 && (
+        {this.getProgressValue() > 0 && (
           <div className="control" onClick={this.decrementProgress}>
             <span className="controlIcon">-</span> Remove Progress
           </div>
@@ -122,13 +152,9 @@ const GoalView = React.createClass({
     return (
       <InlineCss stylesheet={styles} componentName="component">
         <h3>Goal: {this.props.active.name}</h3>
-        <div className="timePeriods">
-          From {this.getStartDate()} to {this.getEndDate()} ({this.getGoalDuration()} days)
-        </div>
+        {this.getTimePeriodSummary()}
         {this.getMilestones()}
-        <div>
-          Progress: {this.getProgress()}
-        </div>
+        {this.getProgress()}
         {this.getControls()}
       </InlineCss>
     );
