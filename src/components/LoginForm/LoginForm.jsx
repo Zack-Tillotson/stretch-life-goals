@@ -10,7 +10,7 @@ import firebaseActions from '../../firebase/actions';
 const LoginForm = React.createClass({
 
   render() {
-    const services = ['google', 'facebook', 'twitter', 'anonymous'];
+    const services = ['facebook', 'anonymous'];
     return (
       <InlineCss stylesheet={styles} componentName="container">
 
