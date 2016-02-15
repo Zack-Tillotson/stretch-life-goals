@@ -16,8 +16,7 @@ const GoalView = React.createClass({
     active: React.PropTypes.object.isRequired
   },
 
-  getMilestones() {
-    
+  getMilestoneValues() {
     const progress = this.getProgressValue();
     let foundActive = false;
 
@@ -33,9 +32,19 @@ const GoalView = React.createClass({
       const completeClass = isComplete ? 'complete' : '';
       const activeClass = isActive ? 'active' : '';
 
-      return {value: milestone, completeClass, activeClass};
+      return {value: milestone, completeClass, activeClass, isActive, isComplete};
     });
 
+    return milestones;
+  },
+
+  getCurrentMilestone() {
+    return this.getMilestoneValues().find(milestone => milestone.isActive).value;
+  },
+
+  getMilestones() {   
+
+    const milestones = this.getMilestoneValues();
 
     return (
       <div className="milestones">
@@ -54,8 +63,40 @@ const GoalView = React.createClass({
   getProgress() {
     return (
       <div className="progressSection">
-        Progress: {this.getProgressValue()}
-        {this.getProgressGraph()}
+        <div className="lenseSection">
+          <h3>Progress</h3>
+          <div>{this.getProgressValue()} Progress</div>
+          <div>{this.getCurrentMilestone()} Milestone</div>
+          <div className="bold">{parseInt(this.getProgressValue() / this.getCurrentMilestone() * 100)}% to your goal!</div>
+        </div>
+        <div className="lenseSection">
+          <h3>Challenge Time</h3>
+          <div>{moment.duration(Date.now() - new Date(this.props.active.startDate).getTime()).humanize()} so far</div>
+          <div>{moment.duration(new Date(this.props.active.endDate).getTime() - new Date(this.props.active.startDate).getTime()).humanize()} total</div>
+          <div className="bold">{parseInt((this.props.active.endDate - Date.now()) / (new Date(this.props.active.endDate).getTime() - new Date(this.props.active.startDate).getTime()) * 100)}% of the challenge time left!</div>
+        </div>
+        <div className="lenseSection">
+          <h3>Rates</h3>
+          <table>
+            <tbody>
+              <tr>
+                <td>Challenge pace</td>
+                <td>{parseInt(this.getCurrentMilestone() / moment.duration(new Date(this.props.active.endDate).getTime() - new Date(this.props.active.startDate).getTime()).asDays() * 100) / 100} per day</td>
+                <td>{parseInt(this.getCurrentMilestone() / moment.duration(new Date(this.props.active.endDate).getTime() - new Date(this.props.active.startDate).getTime()).asWeeks() * 100) / 100} per week</td>
+              </tr>
+              <tr>
+                <td>Pace so far</td>
+                <td>{parseInt(this.getProgressValue() / moment.duration(Date.now() - new Date(this.props.active.startDate).getTime()).asDays() * 100) / 100} per day</td>
+                <td>{parseInt(this.getProgressValue() / moment.duration(Date.now() - new Date(this.props.active.startDate).getTime()).asWeeks() * 100) / 100} per week</td>
+              </tr>
+              <tr className="bold">
+                <td>Pace to success</td>
+                <td>{parseInt((this.getCurrentMilestone() - this.getProgressValue()) / moment.duration(new Date(this.props.active.endDate).getTime() - Date.now()).asDays() * 100) / 100} per day</td>
+                <td>{parseInt((this.getCurrentMilestone() - this.getProgressValue()) / moment.duration(new Date(this.props.active.endDate).getTime() - Date.now()).asWeeks() * 100) / 100} per week</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     );
   },
@@ -69,6 +110,7 @@ const GoalView = React.createClass({
     const {progress, milestones, startDate, endDate} = this.props.active;
     return (
       <ProgressGraph 
+        ref="graph"
         progress={progress} 
         milestones={milestones}
         startDate={startDate}
@@ -113,12 +155,12 @@ const GoalView = React.createClass({
 
   getStartDate() {
     const {startDate} = this.props.active;
-    return moment(startDate).format('MMM d, YYYY');
+    return moment(startDate).format('MMM D, YYYY');
   },
 
   getEndDate() {
     const {endDate} = this.props.active;
-    return moment(endDate).format('MMM d, YYYY');
+    return moment(endDate).format('MMM D, YYYY');
   },
 
   getGoalDuration() {
@@ -155,6 +197,7 @@ const GoalView = React.createClass({
         {this.getTimePeriodSummary()}
         {this.getMilestones()}
         {this.getProgress()}
+        {this.getProgressGraph()}
         {this.getControls()}
       </InlineCss>
     );

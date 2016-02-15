@@ -26,6 +26,10 @@ const ProgressGraph = React.createClass({
     };
   },
 
+  getPeriod() {
+    return this.state.period;
+  },
+
   getPeriodControls() {
     const dayClass = this.state.period == 'day' ? 'active' : '';
     const weekClass = this.state.period == 'week' ? 'active' : '';
@@ -84,7 +88,7 @@ const ProgressGraph = React.createClass({
 
   getProgressDuringPeriod(dates) {
     const {startDate, endDate} = dates;
-    console.log(this.getFormattedDate(startDate), this.getFormattedDate(endDate));
+
     return Object.keys(this.props.progress).filter(key => {
       const progress = this.props.progress[key];
       return startDate.isBefore(moment(progress.timestamp)) && endDate.isAfter(moment(progress.timestamp))
@@ -92,10 +96,18 @@ const ProgressGraph = React.createClass({
   },
 
   filterAxisLabels(label, index, ary) {
-    if(ary.length > 100) {
-      return index % 10 == 0 ? label : null;
-    } else if(ary.length > 50) {
-      return index % 3 == 0 ? label : null;
+    const labelCount = 15;
+    if(ary.length > labelCount) {
+      const divisor = parseInt(ary.length / labelCount);
+      let trueIndex = -9999999;
+      return ary.map((item, aryIndex) => {
+        if(aryIndex > trueIndex + divisor) {
+          trueIndex = aryIndex;
+          return true;
+        } else {
+          return false;
+        }
+      })[index] ? label : null;
     } else {
       return label;
     }

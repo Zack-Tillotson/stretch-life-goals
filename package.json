@@ -1,6 +1,6 @@
 {
   "name": "stretch-life-goals",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "description": "Life goals with built in encouragement to push yourself!",
   "scripts": {
     "start": "webpack-dev-server --port 8888 --content-base app/ --inline --display-reasons --display-error-details",
